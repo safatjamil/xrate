@@ -31,4 +31,7 @@ class ScrapppingResources:
         "YER",
         "ZAR", "ZMW", "ZWD"
         ]
+
+class Response:
+    codes = {"ok": 200, "upgrade": 426, }
         
