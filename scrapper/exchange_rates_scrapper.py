@@ -1,6 +1,9 @@
+import os
+import sys
 import requests
 from bs4 import BeautifulSoup
-import resources
+sys.path.append(".")
+from . import resources
 
 
 class ExchangeRatesOrg:
@@ -22,10 +25,15 @@ class ExchangeRatesOrg:
 
     def parse_exchange_rates(self):
         response_message = {"code": "", "error": "", "message": "", "data": {}}
-        request = requests.get(self.url, timeout=20)
+        try:
+            request = requests.get(self.url, timeout=20)
+        except:
+            response_message["code"] = self.response_codes["unavailable"]
+            response_message["error"] = "Couldn't connect to www.exchange-rates.org"
+            return response_message
         if request.status_code != 200:
             response_message["code"] = request.status_code
-            response_message["error"] = "Couldn't initiate a valid response"
+            response_message["error"] = "Didn't get a valid response"
             return response_message
         soup = BeautifulSoup(request.content, "html.parser")
         for i in range(len(self.regions)):
@@ -51,7 +59,4 @@ class ExchangeRatesOrg:
         response_message["message"] = "Parsed data successfully"
         response_message["data"] = self.exchange_rates
         return response_message
-
-rates = ExchangeRatesOrg()
-exchange_rates = rates.parse_exchange_rates()
 

@@ -1,7 +1,10 @@
+import os
+import sys
 import re
 import requests
 from bs4 import BeautifulSoup
-import resources
+sys.path.append(".")
+from . import resources
 
 
 class CalculatorNet:
@@ -14,10 +17,15 @@ class CalculatorNet:
     
     def parse_exchange_rates(self):
         response_message = {"code": "", "error": "", "message": "", "data": {}}
-        request = requests.get(self.url, timeout=20)
+        try:
+            request = requests.get(self.url, timeout=20)
+        except:
+            response_message["code"] = self.response_codes["unavailable"]
+            response_message["error"] = "Couldn't connect to www.calculator.net"
+            return response_message
         if request.status_code != 200:
             response_message["code"] = request.status_code
-            response_message["error"] = "Couldn't initiate a valid response"
+            response_message["error"] = "Didn't get a valid response"
             return response_message
         soup = BeautifulSoup(request.content, "html.parser")
         script = soup.find_all("script")[2].text
@@ -40,8 +48,4 @@ class CalculatorNet:
         response_message["data"] = self.exchange_rates
         return response_message
 
-calculatornet = CalculatorNet()
-rates = calculatornet.parse_exchange_rates()
-print(rates)
-print(len(rates["data"].keys()))
 

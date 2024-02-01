@@ -2,6 +2,7 @@ CREATE TABLE rates (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     currency VARCHAR(5) NOT NULL,
     rate DOUBLE(15) NOT NULL,
+    last_updated VARCHAR(50) NOT NULL,
 );
 
 CREATE TABLE users (
