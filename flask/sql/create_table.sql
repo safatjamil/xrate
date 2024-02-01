@@ -7,11 +7,13 @@ CREATE TABLE rates (
 CREATE TABLE users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     username VARCHAR(50) NOT NULL,
-    password VARCHAR(200) NOT NULL,
+    password_ VARCHAR(200) NOT NULL,
 );
 
 CREATE TABLE details (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    last_date VARCHAR(50) NOT NULL,
-    last_time VARCHAR(200) NOT NULL,
+    pk_id TINYINT NOT NULL DEFAULT 1,
+    CONSTRAINT id INTEGER PRIMARY KEY (pk_id),
+    last_updated VARCHAR(50) NOT NULL CHECK,
+    timezone VARCHAR(50) NOT NULL,
+    CONSTRAINT single_row CHECK(pk_id=1),
 );
