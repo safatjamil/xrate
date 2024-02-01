@@ -9,7 +9,7 @@ try:
         users = yaml.safe_load(f)
     for user in users.keys():
         cur.execute(f"INSERT INTO users (username, password) 
-                      VALUES ({user}, {users[user]["password"]})"
+                      VALUES ({user}, {users[user]['password']})"
                    )
 connection.commit()
 connection.close()
