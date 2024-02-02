@@ -18,7 +18,7 @@ try:
     with open("../../users.yaml", "r") as f:
         users = yaml.safe_load(f)
     for user in users.keys():
-        cur.execute(f"INSERT INTO users (username, password) 
+        cur.execute(f"INSERT INTO users (username, password) \
                       VALUES ({user}, {users[user]['password']})"
                    )
 
