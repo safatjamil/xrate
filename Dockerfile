@@ -10,8 +10,6 @@ RUN apk add --no-cache sqlite3
 RUN sqlite3 xrate.db
 RUN pip install -r requirements.txt
 RUN python3 flask/sql/init_db.py 
-RUN python3 flask/sql/create_users.py 
-RUN python3 flask/sql/create_details.py 
 
 ENV FLASK_APP=/xrate/flask/app.py
 ENV FLASK_RUN_HOST=0.0.0.0
