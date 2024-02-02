@@ -23,7 +23,7 @@ try:
                    )
 
 # Create details
-cur.execute("INSERT INTO details (last_updated, timezone) 
+cur.execute("INSERT INTO details (last_updated, timezone) \
              VALUES ('None', 'None')"
            )
 
