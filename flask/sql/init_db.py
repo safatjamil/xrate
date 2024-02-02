@@ -21,7 +21,9 @@ try:
         cur.execute(f"INSERT INTO users (username, password) \
                       VALUES ({user}, {users[user]['password']})"
                    )
-
+except:
+    print("Couldn't create users")
+    
 # Create details
 cur.execute("INSERT INTO details (last_updated, timezone) \
              VALUES ('None', 'None')"
