@@ -1,6 +1,6 @@
 bs4
 flask
 flask-RESTful
-sqlite3
+db-sqlite3
 toml
 pyyaml
