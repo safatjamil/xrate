@@ -2,8 +2,9 @@ import os
 import sys
 import requests
 from bs4 import BeautifulSoup
-sys.path.append(".")
-from . import resources
+sys.path.append("..")
+print(sys.path)
+from resources import currencies, response
 
 
 class ExchangeRatesOrg:
@@ -19,8 +20,8 @@ class ExchangeRatesOrg:
             "cross-rates-body cross-rates-from-AS",
             "cross-rates-body cross-rates-from-OC"
             ]
-        self.currencies = resources.ScrapppingResources.currencies
-        self.response_codes = resources.Response.codes
+        self.currencies = currencies.Currencies.currencies
+        self.response_codes = response.Response.codes
         self.exchange_rates = {}
 
     def parse_exchange_rates(self):
@@ -60,3 +61,6 @@ class ExchangeRatesOrg:
         response_message["data"] = self.exchange_rates
         return response_message
 
+x = ExchangeRatesOrg()
+y = x.parse_exchange_rates()
+print(y)

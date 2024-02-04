@@ -1,4 +1,4 @@
-class ScrapppingResources:
+class Currencies:
     currencies = [
         "AED", "AFN", "ALL", "AMD", "ANG", "AOA", "ARS", "AUD", "AWZ", "AZN", 
         "BAM", "BBD", "BGN", "BHD", "BIF", "BMD", "BND", "BOB", "BOV", "BRL", \

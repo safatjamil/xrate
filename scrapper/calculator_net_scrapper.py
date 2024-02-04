@@ -3,16 +3,17 @@ import sys
 import re
 import requests
 from bs4 import BeautifulSoup
-sys.path.append(".")
-from . import resources
+sys.path.append("..")
+from resources import currencies, response
+
 
 
 class CalculatorNet:
 
     def __init__(self):
         self.url = "https://www.calculator.net/currency-calculator.html"
-        self.currencies = resources.ScrapppingResources.currencies
-        self.response_codes = resources.Response.codes
+        self.currencies = currencies.Currencies.currencies
+        self.response_codes = response.Response.codes
         self.exchange_rates = {}
     
     def parse_exchange_rates(self):
@@ -48,4 +49,6 @@ class CalculatorNet:
         response_message["data"] = self.exchange_rates
         return response_message
 
-
+x = CalculatorNet()
+y = x.parse_exchange_rates()
+print(y)
