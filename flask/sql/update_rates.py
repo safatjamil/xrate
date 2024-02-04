@@ -10,15 +10,14 @@ from resources import currencies, response
 
 
 now_ = datetime.now()
-date_ = now.date()
+date_ = now_.date()
 time_ = now_.strftime("%H:%M")
 timezone_ = now_.astimezone().tzinfo.tzname(now_.astimezone())
 
 
 class UpdateRates():
     
-    def __init__(self, rates):
-        self.rates = rates
+    def __init__(self):
         self.currencies = currencies.Currencies.currencies
         self.now_ = datetime.now()
         self.time_attr = {"date": self.now_.date(), 
@@ -28,14 +27,23 @@ class UpdateRates():
                          }                
         self.__connection = sqlite3.connect("xrate.db")
     
-    def update_calculator_net(self):
-        cur = self.connection.cursor()
-        for rate in self.rates.keys():
+    def update(self, rates):
+        cur = self.__connection.cursor()
+        for rate in rates.keys():
+            if rate not in self.currencies:
+                continue
             cur.execute("REPLACE INTO rates (currency, rate, date, time, timezone) \
-                 VALUES(?, ?, ?, ?, ?)",\
-                 (rate, rates[rate], self.time_attr["date"], self.time_["time"],\
-                 self.time_attr["timezone"]))
-            
+                         VALUES(?, ?, ?, ?, ?)",\
+                         (rate, rates[rate], self.time_attr["date"], self.time_attr["time"],\
+                          self.time_attr["timezone"]))
+
+        cur.execute("REPLACE INTO details (date, time, timezone) VALUES (?, ?, ?)", \
+                    (self.time_attr["date"], self.time_attr["time"],\
+                     self.time_attr["timezone"]))
+        self.__connection.commit()
+        self.__connection.close()
+
+          
 
 
 
