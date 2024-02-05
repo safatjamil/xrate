@@ -7,9 +7,9 @@ RUN git clone https://github.com/safatjamil/xrate.git
 WORKDIR /xrate
 COPY users.yaml /xrate
 RUN apk add --no-cache sqlite
-RUN sqlite3 xrate.db
+RUN sqlite3 /xrate/flask/sql/xrate.db "create table nulltable(id INTEGER PRIMARY KEY, none TEXT)"
 RUN apk add py3-pip
-RUN pip3 install -r requirements.txt
+RUN pip install -r requirements.txt
 RUN python3 flask/sql/init_db.py 
 
 ENV FLASK_APP=/xrate/flask/app.py

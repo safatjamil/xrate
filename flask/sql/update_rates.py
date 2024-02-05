@@ -25,7 +25,7 @@ class UpdateRates():
                           "timezone": self.now_.astimezone().\
                                       tzinfo.tzname(now_.astimezone())
                          }                
-        self.__connection = sqlite3.connect("xrate.db")
+        self.__connection = sqlite3.connect("/xrate/flask/sql/xrate.db")
     
     def update(self, rates):
         cur = self.__connection.cursor()

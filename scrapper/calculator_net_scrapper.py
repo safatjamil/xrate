@@ -7,7 +7,6 @@ sys.path.append("..")
 from resources import currencies, response
 
 
-
 class CalculatorNet:
 
     def __init__(self):
@@ -48,7 +47,3 @@ class CalculatorNet:
         response_message["message"] = "Parsed data successfully"
         response_message["data"] = self.exchange_rates
         return response_message
-
-x = CalculatorNet()
-y = x.parse_exchange_rates()
-print(y)
