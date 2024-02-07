@@ -3,6 +3,9 @@ import sqlite3
 import yaml
 from datetime import datetime
 
+sys.path.append("../..")
+from resources.cryptograp import Encrypt
+from resources.encode_decode import EncodeDecode
 now_ = datetime.now()
 date_ = now_.date()
 time_ = now_.strftime("%H:%M")
@@ -35,8 +38,10 @@ class InitDb:
                 response["message"] = "No users found"
                 return response
             for user in users.keys():
+                password = Encrypt.hash_password(
+                               EncodeDecode.decode(users[user]['password'])))
                 cur.execute("INSERT INTO users (username, password) VALUES (?, ?)", \
-                            (user, users[user]['password']))
+                            (user, password))
         except:
             response["status"] = False
             response["message"] = "Couldn't create users. Check the users.yaml file"

@@ -5,3 +5,4 @@ flask-RESTful
 db-sqlite3
 toml
 pyyaml
+bcrypt

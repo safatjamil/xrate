@@ -5,6 +5,7 @@ from scrapper.calculator_net_scrapper import CalculatorNet
 from scrapper.exchange_rates_scrapper import ExchangeRatesOrg
 from resources.currencies import Currencies
 from resources.response import Response
+from auth.authenticate_user import AuthUser
 app = Flask(__name__)
 calculator_net = CalculatorNet()
 exchange_rates_org = ExchangeRatesOrg()
@@ -14,11 +15,33 @@ def test_status():
     response = {"status": "OK"}
     return jsonify(response), 200
 
+
+@app.route("/api/<from_>-<to>/", methods = ["GET"])
+def convert_currency(from_, to):
+    response = {}
+    try:
+        data = request.get_json()
+    except:
+        response = {"message": "Invalid request"}
+        return jsonify(response), 400
+    if from_ not in Currencies.currencies or to not in Currencies.currencies:
+        response = {"message": "Invalid currency"}
+        return jsonify(response), 400
+    response = {"message": "ok"}
+    return jsonify(response), 200
+
+
 @app.route("/api/rates/update/", methods = ["GET"])
 def update_rates():
     response = {}
-    update_rates = UpdateRates() 
-    data = calculator_net.parse_exchange_rates()
+    try:
+        data = request.get_json()
+    except:
+        response = {"status": "not ok"}
+        return jsonify(response), 403
+
+
+
     if data["code"] == 200:
         response["data"] = data["data"]
         update_rates.update(data["data"])

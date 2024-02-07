@@ -3,7 +3,6 @@ import sys
 import requests
 from bs4 import BeautifulSoup
 sys.path.append("..")
-print(sys.path)
 from resources import currencies, response
 
 
@@ -60,7 +59,3 @@ class ExchangeRatesOrg:
         response_message["message"] = "Parsed data successfully"
         response_message["data"] = self.exchange_rates
         return response_message
-
-x = ExchangeRatesOrg()
-y = x.parse_exchange_rates()
-print(y)

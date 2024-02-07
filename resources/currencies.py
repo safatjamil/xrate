@@ -1,7 +1,7 @@
 class Currencies:
     currencies = [
         "AED", "AFN", "ALL", "AMD", "ANG", "AOA", "ARS", "AUD", "AWZ", "AZN", 
-        "BAM", "BBD", "BGN", "BHD", "BIF", "BMD", "BND", "BOB", "BOV", "BRL", \
+        "BAM", "BBD", "BDT", "BGN", "BHD", "BIF", "BMD", "BND", "BOB", "BOV", "BRL", \
             "BSD", "BTN", "BWP", "BYN", "BZD", 
         "CAD", "CDF", "CHE", "CHF", "CHW", "CLF", "CLP", "CNY", "COP", "COU", \
             "CRC", "CVE", "CZK", 
