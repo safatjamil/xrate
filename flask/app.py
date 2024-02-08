@@ -6,29 +6,42 @@ from scrapper.exchange_rates_scrapper import ExchangeRatesOrg
 from resources.currencies import Currencies
 from resources.response import Response
 from auth.authenticate_user import AuthUser
+from sql.query import Query
+
 app = Flask(__name__)
 calculator_net = CalculatorNet()
 exchange_rates_org = ExchangeRatesOrg()
+response_codes = Response.codes
+query = Query()
+auth_user = AuthUser()
 
 @app.route("/api/test/", methods = ["GET"])
 def test_status():
     response = {"status": "OK"}
     return jsonify(response), 200
 
-
 @app.route("/api/<from_>-<to>/", methods = ["GET"])
 def convert_currency(from_, to):
-    response = {}
+    response = {"message": "", "data": ""}
     try:
         data = request.get_json()
     except:
-        response = {"message": "Invalid request"}
-        return jsonify(response), 400
+        response["message"] = "Invalid request"
+        return jsonify(response), response_codes["bad_request"]
+    if "username" not in data or "password" not in data:
+        response["message"] = "Please provide your username and password"
+        return jsonify(response), response_codes["auth_error"]
+    auth_ = auth_user.auth(data["username"], data["password"])
+    if not auth["status"]:
+        response["message"] = auth["message"]
+        return jsonify(response), response_codes["auth_error"]
     if from_ not in Currencies.currencies or to not in Currencies.currencies:
-        response = {"message": "Invalid currency"}
-        return jsonify(response), 400
+        response["message"] = "Invalid currency"
+        return jsonify(response), response_codes["bad_request"]
+    from_curr_value = query.currency_value(from_)
+    print(from_curr_value)
     response = {"message": "ok"}
-    return jsonify(response), 200
+    return jsonify(response), response_codes["ok"]
 
 
 @app.route("/api/rates/update/", methods = ["GET"])
@@ -39,9 +52,6 @@ def update_rates():
     except:
         response = {"status": "not ok"}
         return jsonify(response), 403
-
-
-
     if data["code"] == 200:
         response["data"] = data["data"]
         update_rates.update(data["data"])

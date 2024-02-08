@@ -4,14 +4,17 @@ import bcrypt
 sys.path.append("../..")
 
 class AuthUser:
-    connection = sqlite3.connect("/xrate/flask/sql/xrate.db")
-    def auth(username, password):
+
+    def __init__(self):
+        self.__connection = sqlite3.connect("/xrate/flask/sql/xrate.db")
+
+    def auth(self, username, password):
         response = {"status": False, "message": ""}
         cur = self.__connection.cursor()
         try:
-            cur.execute("SELECT * FROM rates WHERE username=?", (username))
+            cur.execute("SELECT * FROM users WHERE username=?", (username,))
             row = cur.fetchall()
-            if row == 0:
+            if len(row) == 0:
                 response["status"] = False
                 response["message"] = "User not found"
                 return response

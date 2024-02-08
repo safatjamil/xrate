@@ -1,12 +1,11 @@
 import sys
 import sqlite3
-import yaml
 from datetime import datetime
 
 sys.path.append("../..")
 from scrapper.calculator_net_scrapper import CalculatorNet
 from scrapper.exchange_rates_scrapper import ExchangeRatesOrg
-from resources import currencies, response
+from resources import currencies
 
 
 now_ = datetime.now()
