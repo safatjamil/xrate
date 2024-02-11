@@ -22,7 +22,7 @@ class Query:
             row = cur.fetchone()
             if not row:
                 response["status"] = False
-                response["message"] = "Currency not found"
+                response["message"] = f"We did't find any data for {currency}"
                 return response
             response["status"] = True
             response["message"] = "Success"
@@ -35,4 +35,32 @@ class Query:
             response["status"] = False
             response["message"] = "Something went wrong"
             return response
-
+    
+    def currency_convert_all(self, currency):
+        response = {"status": False, "message": "", "data": {}}
+        cur = self.__connection.cursor()
+        try:
+            cur.execute("SELECT * FROM rates WHERE currency=?", (currency,))
+            row = cur.fetchone()
+            if not row:
+                response["status"] = False
+                response["message"] = f"We did't find any data for {currency}"
+                return response
+            curr_rate = row[2]
+        except:
+            response["status"] = False
+            response["message"] = "Something went wrong"
+            return response
+        
+        try:
+            cur.execute("SELECT * FROM rates WHERE currency!=?", (currency,))
+            rows = cur.fetchall()
+            response["status"] = True
+            for row in rows:
+                response["data"][row[1]] = (1/curr_rate)*row[2]
+            response["message"] = "Conversion is successful"
+            return response
+        except:
+            response["status"] = False
+            response["message"] = "Something went wrong"
+            return response

@@ -1,9 +1,11 @@
 FROM python:3.10-alpine
 WORKDIR /
+ARG timezone
 RUN apk update && apk upgrade
 RUN apk add git 
 RUN git clone https://github.com/safatjamil/xrate.git
-
+RUN apk add --no-cache tzdata
+ENV TZ=$timezone
 WORKDIR /xrate
 COPY users.yaml /xrate
 RUN apk add --no-cache sqlite

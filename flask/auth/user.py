@@ -6,7 +6,8 @@ sys.path.append("../..")
 class AuthUser:
 
     def __init__(self):
-        self.__connection = sqlite3.connect("/xrate/flask/sql/xrate.db", check_same_thread=False)
+        self.__connection = sqlite3.connect("/xrate/flask/sql/xrate.db", 
+                                            check_same_thread=False)
 
     def auth(self, username, password):
         response = {"status": False, "message": ""}

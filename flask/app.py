@@ -23,7 +23,7 @@ def test_status():
     response = {"status": "ok"}
     return jsonify(response), 200
 
-@app.route("/api/user/auth", methods = ["GET"])
+@app.route("/api/user/auth/", methods = ["GET"])
 def authenticate_user():
     response = {"status": "error", "message": "", "data": {}}
     try:
@@ -42,39 +42,6 @@ def authenticate_user():
     response["message"] = "User authentication successful"
     return jsonify(response), response_codes["ok"]
     
-
-@app.route("/api/conversion/<from_>-<to_>/", methods = ["GET"])
-def convert_currency(from_, to_):
-    from_ = from_.upper()
-    to_ = to_.upper()
-    response = {"status": "error", "message": "", "data": {}}
-    try:
-        data = request.get_json()
-    except:
-        response["message"] = "Invalid request"
-        return jsonify(response), response_codes["bad_request"]
-    if "username" not in data or "password" not in data:
-        response["message"] = "Please provide you r username and password"
-        return jsonify(response), response_codes["auth_error"]
-    auth_ = auth_user.auth(data["username"], data["password"])
-    if not auth_["status"]:
-        response["message"] = auth_["message"]
-        return jsonify(response), response_codes["auth_error"]
-    if from_ not in Currencies.currencies or to_ not in Currencies.currencies:
-        response["message"] = "Invalid currency"
-        return jsonify(response), response_codes["bad_request"]
-    from_curr_value = query.currency_details(from_)
-    to_curr_value = query.currency_details(to_)
-    if not from_curr_value["status"] or not to_curr_value["status"]:
-        response["message"] = "Something went wrong"
-        return jsonify(response), response_codes["unrecognized"]
-    
-    response["status"] = "ok"
-    response["message"] = "Successful"
-    response["data"]["conv_rate"] = (1/from_curr_value["data"]["rate"])*\
-                                    to_curr_value["data"]["rate"]
-    return jsonify(response), response_codes["ok"]
-
 
 @app.route("/api/rates/update/", methods = ["POST"])
 def update_curr_rates():
@@ -111,6 +78,68 @@ def update_curr_rates():
             return jsonify(response), response["code"]
 
 
+@app.route("/api/convert/<from_>-<to_>/", methods = ["GET"])
+def convert_currency(from_, to_):
+    from_ = from_.upper()
+    to_ = to_.upper()
+    response = {"status": "error", "message": "", "data": {}}
+    try:
+        data = request.get_json()
+    except:
+        response["message"] = "Invalid request"
+        return jsonify(response), response_codes["bad_request"]
+    if "username" not in data or "password" not in data:
+        response["message"] = "Please provide you r username and password"
+        return jsonify(response), response_codes["auth_error"]
+    auth_ = auth_user.auth(data["username"], data["password"])
+    if not auth_["status"]:
+        response["message"] = auth_["message"]
+        return jsonify(response), response_codes["auth_error"]
+    if from_ not in Currencies.currencies or to_ not in Currencies.currencies:
+        response["message"] = "Invalid currency"
+        return jsonify(response), response_codes["bad_request"]
+    from_curr_value = query.currency_details(from_)
+    to_curr_value = query.currency_details(to_)
+    if not from_curr_value["status"] or not to_curr_value["status"]:
+        response["message"] = "Something went wrong"
+        return jsonify(response), response_codes["unrecognized"]
+    
+    response["status"] = "ok"
+    response["message"] = "Successful"
+    response["data"]["conv_rate"] = (1/from_curr_value["data"]["rate"])*\
+                                    to_curr_value["data"]["rate"]
+    return jsonify(response), response_codes["ok"]
+
+@app.route("/api/convert-all/<currency>/", methods = ["GET"])
+def convert_to_all(currency):
+    currency = currency.upper()
+    response = {"status": "error", "message": "", "data": {}}
+    try:
+        data = request.get_json()
+    except:
+        response["message"] = "Invalid request"
+        return jsonify(response), response_codes["bad_request"]
+    if "username" not in data or "password" not in data:
+        response["message"] = "Please provide you r username and password"
+        return jsonify(response), response_codes["auth_error"]
+    auth_ = auth_user.auth(data["username"], data["password"])
+    if not auth_["status"]:
+        response["message"] = auth_["message"]
+        return jsonify(response), response_codes["auth_error"]
+    if currency not in Currencies.currencies:
+        response["message"] = "Invalid currency"
+        return jsonify(response), response_codes["bad_request"]
+    data = query.currency_convert_all(currency)
+    if not data["status"]:
+        response["message"] = "Something went wrong"
+        return jsonify(response), response_codes["unrecognized"]
+    
+    response["status"] = "ok"
+    response["message"] = "Successful"
+    response["data"] = data["data"]
+    return jsonify(response), response_codes["ok"]
+
+
 @app.route("/api/<currency>/last-updated/", methods = ["GET"])
 def currency_last_updated(currency):
     currency = currency.upper()
@@ -138,4 +167,3 @@ def currency_last_updated(currency):
     response["data"]["time"] = details["data"]["time"]
     response["data"]["timezone"] = details["data"]["timezone"]
     return jsonify(response), response_codes["ok"]
-    
