@@ -11,24 +11,28 @@ from resources import currencies
 class Query:
 
     def __init__(self):
-        self.__connection = sqlite3.connect("/xrate/flask/sql/xrate.db")
+        self.__connection = sqlite3.connect("/xrate/flask/sql/xrate.db",
+                                            check_same_thread=False)
     
-    def currency_value(self, currency):
-        response = {"status": False, "message": "", "data": ""}
+    def currency_details(self, currency):
+        response = {"status": False, "message": "", "data": {}}
         cur = self.__connection.cursor()
         try:
-            cur.execute("SELECT * FROM rates WHERE currency=?", (currency))
+            cur.execute("SELECT * FROM rates WHERE currency=?", (currency,))
             row = cur.fetchone()
             if not row:
                 response["status"] = False
                 response["message"] = "Currency not found"
                 return response
-            print(row)
             response["status"] = True
             response["message"] = "Success"
-            response["data"] = row[0][2]
+            response["data"]["rate"] = row[2]
+            response["data"]["date"] = row[3]
+            response["data"]["time"] = row[4]
+            response["data"]["timezone"] = row[5]
             return response
         except:
             response["status"] = False
             response["message"] = "Something went wrong"
             return response
+

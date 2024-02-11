@@ -5,26 +5,21 @@ from datetime import datetime
 sys.path.append("../..")
 from scrapper.calculator_net_scrapper import CalculatorNet
 from scrapper.exchange_rates_scrapper import ExchangeRatesOrg
-from resources import currencies
-
-
-now_ = datetime.now()
-date_ = now_.date()
-time_ = now_.strftime("%H:%M")
-timezone_ = now_.astimezone().tzinfo.tzname(now_.astimezone())
+from resources.currencies import Currencies
 
 
 class UpdateRates():
     
     def __init__(self):
-        self.currencies = currencies.Currencies.currencies
+        self.currencies = Currencies.currencies
         self.now_ = datetime.now()
         self.time_attr = {"date": self.now_.date(), 
                           "time": self.now_.strftime("%H:%M"),
                           "timezone": self.now_.astimezone().\
-                                      tzinfo.tzname(now_.astimezone())
+                                      tzinfo.tzname(self.now_.astimezone())
                          }                
-        self.__connection = sqlite3.connect("/xrate/flask/sql/xrate.db")
+        self.__connection = sqlite3.connect("/xrate/flask/sql/xrate.db", 
+                                            check_same_thread=False)
     
     def update(self, rates):
         cur = self.__connection.cursor()

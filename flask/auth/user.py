@@ -6,7 +6,7 @@ sys.path.append("../..")
 class AuthUser:
 
     def __init__(self):
-        self.__connection = sqlite3.connect("/xrate/flask/sql/xrate.db")
+        self.__connection = sqlite3.connect("/xrate/flask/sql/xrate.db", check_same_thread=False)
 
     def auth(self, username, password):
         response = {"status": False, "message": ""}
@@ -19,7 +19,7 @@ class AuthUser:
                 response["message"] = "User not found"
                 return response
             user = row[0]
-            if bcrypt.checkpw(password.encode("utf-8"), row[1]):
+            if bcrypt.checkpw(password.encode("utf-8"), user[2]):
                 response["status"] = True
                 response["message"] = "User not found"
                 return response
