@@ -1,0 +1,8 @@
+# Build the docker image
+docker build  --build-arg timezone=Europe/London --tag xrate:v1 --no-cache .
+
+# Create docker network
+docker network create -d bridge xrate-network --subnet <your_subnet>
+
+# Run the container
+docker run --name xrate -p 3000:5000 --network xrate-network -d -t xrate:v1
