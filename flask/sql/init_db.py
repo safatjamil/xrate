@@ -34,7 +34,7 @@ class InitDb:
     def create_users(self):
         response = {"status": "", "message": ""}
         try:
-            with open("../../users.yaml", "r") as f:
+            with open("../../resources/users.yaml", "r") as f:
                 users = yaml.safe_load(f)
             if not users:
                 response["status"] = False
