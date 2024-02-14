@@ -164,8 +164,8 @@ def currency_last_updated(currency):
         return jsonify(response), response_codes["bad_request"]
     details = query.currency_details(currency)
     if not details["status"]:
-        response["message"] = "Something went wrong"
-        return jsonify(response), response_codes["unrecognized"]
+        response["message"] = details["message"]
+        return jsonify(response), response_codes["unavailable"]
     response["data"]["date"] = details["data"]["date"]
     response["data"]["time"] = details["data"]["time"]
     response["data"]["timezone"] = details["data"]["timezone"]
