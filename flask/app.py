@@ -166,6 +166,7 @@ def currency_last_updated(currency):
     if not details["status"]:
         response["message"] = details["message"]
         return jsonify(response), response_codes["unavailable"]
+    response["status"] = "ok"
     response["data"]["date"] = details["data"]["date"]
     response["data"]["time"] = details["data"]["time"]
     response["data"]["timezone"] = details["data"]["timezone"]
