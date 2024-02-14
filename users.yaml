@@ -1,0 +1,3 @@
+# Create API users here. The password must be base64 encoded
+shafat:
+  password: MTIzNDU2

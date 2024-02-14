@@ -99,10 +99,13 @@ def convert_currency(from_, to_):
         response["message"] = "Invalid currency"
         return jsonify(response), response_codes["bad_request"]
     from_curr_value = query.currency_details(from_)
+    if not from_curr_value["status"]:
+        response["message"] = from_curr_value["message"]
+        return jsonify(response), response_codes["unavailable"]
     to_curr_value = query.currency_details(to_)
-    if not from_curr_value["status"] or not to_curr_value["status"]:
-        response["message"] = "Something went wrong"
-        return jsonify(response), response_codes["unrecognized"]
+    if not to_curr_value["status"]:
+        response["message"] = to_curr_value["message"]
+        return jsonify(response), response_codes["unavailable"]
     
     response["status"] = "ok"
     response["message"] = "Successful"
@@ -131,7 +134,7 @@ def convert_to_all(currency):
         return jsonify(response), response_codes["bad_request"]
     data = query.currency_convert_all(currency)
     if not data["status"]:
-        response["message"] = "Something went wrong"
+        response["message"] = data["message"]
         return jsonify(response), response_codes["unrecognized"]
     
     response["status"] = "ok"
